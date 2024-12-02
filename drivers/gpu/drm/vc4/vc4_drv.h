@@ -81,16 +81,11 @@ struct vc4_perfmon {
 	u64 counters[] __counted_by(ncounters);
 };
 
-enum vc4_gen {
-	VC4_GEN_4,
-	VC4_GEN_5,
-};
-
 struct vc4_dev {
 	struct drm_device base;
 	struct device *dev;
 
-	enum vc4_gen gen;
+	bool is_vc5;
 
 	unsigned int irq;
 
