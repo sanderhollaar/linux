@@ -744,11 +744,6 @@ static int vc4_plane_allocate_lbm(struct drm_plane_state *state)
 	if (!lbm_size)
 		return 0;
 
-	if (vc4->gen == VC4_GEN_5)
-		lbm_size = ALIGN(lbm_size, 64);
-	else if (vc4->gen == VC4_GEN_4)
-		lbm_size = ALIGN(lbm_size, 32);
-
 	drm_dbg_driver(drm, "[PLANE:%d:%s] LBM Allocation Size: %u\n",
 		       plane->base.id, plane->name, lbm_size);
 
@@ -764,7 +759,8 @@ static int vc4_plane_allocate_lbm(struct drm_plane_state *state)
 		spin_lock_irqsave(&vc4->hvs->mm_lock, irqflags);
 		ret = drm_mm_insert_node_generic(&vc4->hvs->lbm_mm,
 						 &vc4_state->lbm,
-						 lbm_size, 1,
+						 lbm_size,
+						 vc4->gen == VC4_GEN_5 ? 64 : 32,
 						 0, 0);
 		spin_unlock_irqrestore(&vc4->hvs->mm_lock, irqflags);
 
