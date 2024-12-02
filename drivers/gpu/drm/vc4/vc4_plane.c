@@ -987,7 +987,7 @@ static int vc4_plane_allocate_lbm(struct drm_plane_state *state)
 					     VC4_NUM_LBM_HANDLES,
 					     GFP_KERNEL);
 		if (lbm_handle < 0) {
-			drm_dbg_driver(drm, "Out of lbm_handles\n");
+			drm_err(drm, "Out of lbm_handles\n");
 			return lbm_handle;
 		}
 		vc4_state->lbm_handle = lbm_handle;
@@ -1004,8 +1004,7 @@ static int vc4_plane_allocate_lbm(struct drm_plane_state *state)
 		spin_unlock_irqrestore(&hvs->mm_lock, irqflags);
 
 		if (ret) {
-			drm_dbg_driver(drm, "Failed to allocate LBM entry: %d\n",
-				       ret);
+			drm_err(drm, "Failed to allocate LBM entry: %d\n", ret);
 			refcount_set(&refcount->refcount, 0);
 			ida_free(&hvs->lbm_handles, lbm_handle);
 			vc4_state->lbm_handle = 0;
@@ -1077,7 +1076,7 @@ static int vc6_plane_allocate_upm(struct drm_plane_state *state)
 						     VC4_NUM_UPM_HANDLES,
 						     GFP_KERNEL);
 			if (upm_handle < 0) {
-				drm_dbg_driver(drm, "Out of upm_handles\n");
+				drm_err(drm, "Out of upm_handles\n");
 				return upm_handle;
 			}
 			vc4_state->upm_handle[i] = upm_handle;
@@ -1093,8 +1092,7 @@ static int vc6_plane_allocate_upm(struct drm_plane_state *state)
 							 0, 0);
 			spin_unlock_irqrestore(&hvs->mm_lock, irqflags);
 			if (ret) {
-				drm_dbg_driver(drm, "Failed to allocate UPM entry: %d\n",
-					       ret);
+				drm_err(drm, "Failed to allocate UPM entry: %d\n", ret);
 				refcount_set(&refcount->refcount, 0);
 				ida_free(&hvs->upm_handles, upm_handle);
 				vc4_state->upm_handle[i] = 0;
