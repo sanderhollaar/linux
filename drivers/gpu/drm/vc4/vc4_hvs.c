@@ -823,28 +823,10 @@ u8 vc4_hvs_get_fifo_frame_count(struct vc4_hvs *hvs, unsigned int fifo)
 	if (!drm_dev_enter(drm, &idx))
 		return 0;
 
-	switch (vc4->gen) {
-	case VC4_GEN_6:
+	if (vc4->gen >= VC4_GEN_6) {
 		field = VC4_GET_FIELD(HVS_READ(SCALER6_DISPX_STATUS(fifo)),
 				      SCALER6_DISPX_STATUS_FRCNT);
-		break;
-	case VC4_GEN_5:
-		switch (fifo) {
-		case 0:
-			field = VC4_GET_FIELD(HVS_READ(SCALER_DISPSTAT1),
-					      SCALER5_DISPSTAT1_FRCNT0);
-			break;
-		case 1:
-			field = VC4_GET_FIELD(HVS_READ(SCALER_DISPSTAT1),
-					      SCALER5_DISPSTAT1_FRCNT1);
-			break;
-		case 2:
-			field = VC4_GET_FIELD(HVS_READ(SCALER_DISPSTAT2),
-					      SCALER5_DISPSTAT2_FRCNT2);
-			break;
-		}
-		break;
-	case VC4_GEN_4:
+	} else {
 		switch (fifo) {
 		case 0:
 			field = VC4_GET_FIELD(HVS_READ(SCALER_DISPSTAT1),
@@ -859,7 +841,6 @@ u8 vc4_hvs_get_fifo_frame_count(struct vc4_hvs *hvs, unsigned int fifo)
 					      SCALER_DISPSTAT2_FRCNT2);
 			break;
 		}
-		break;
 	}
 
 	drm_dev_exit(idx);
