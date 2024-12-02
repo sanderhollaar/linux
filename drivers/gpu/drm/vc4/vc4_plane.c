@@ -2660,7 +2660,7 @@ struct drm_plane *vc4_plane_init(struct drm_device *dev,
 	return plane;
 }
 
-#define VC4_NUM_OVERLAY_PLANES	48
+#define VC4_NUM_OVERLAY_PLANES	16
 
 int vc4_plane_create_additional_planes(struct drm_device *drm)
 {
